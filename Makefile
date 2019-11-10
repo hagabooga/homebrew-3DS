@@ -42,7 +42,7 @@ GAME			:= game
 
 APP_TITLE		:= Leggo
 APP_AUTHOR		:= Cameron Hu
-APP_VERSION		:= 0.69
+APP_VERSION		:= 0.01
 APP_DESCRIPTION := Made with Löve Potion
 
 ICON			:= icon.png
