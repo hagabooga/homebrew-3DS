@@ -1,45 +1,53 @@
-require "load"
 require "button"
+require "intro"
+require "constants"
 
+if love.system.getOS() == "Windows" then
+    love.window.setMode(c.SCREEN_TOP_WIDTH, c.SCREEN_HEIGHT)
+end
+-- inventory_buttons = {}
+-- for i = 1, 12 do
+--     inventory_buttons[i] = Button:new(140 + (math.floor((i - 1) / 4) * 60),
+--                                       (i % 4) * 60, 60, 60, 0, 1)
+-- end
 
-screen_top_width = 400
-screen_height = 240
-screen_bottom_width = 320
--- font = love.graphics.setNewFont(50)
-inventory_buttons = {}
-for i=1,6 do
-    inventory_buttons[i] = Button.new(200, (i - 1)*40)
-end
-for i=7,12 do
-    inventory_buttons[i] = Button.new(240, (i - 7)*40)
-end
-for i=13,18 do
-    inventory_buttons[i] = Button.new(280, (i - 13)*40)
+function love.load()
+    yh = love.graphics.newImage("yh.png")
+    ew = love.graphics.newImage("ew.png")
+    beige32 = love.graphics.newImage("beige32.png")
+    beige40 = love.graphics.newImage("beige40.png")
+    bg = love.audio.newSource("music/intro.mp3", "stream")
+    bg:setVolume(0.4)
+    bg:setLooping(true)
+    bg:play()
+    font36 = love.graphics.newFont("segoeuil.ttf", 36)
+    font20 = love.graphics.newFont("segoeuil.ttf", 20)
+    font28 = love.graphics.newFont("segoeuil.ttf", 28)
+    start_button = Button:new("Start", font28, nil, 0, 0, 0, 1)
+    start_button:setToScreen(1 / 4, 1 / 2)
+    quit_button = Button:new("Quit", font28, quit_game, 0, 0, 1)
+    quit_button:setToScreen(3 / 4, 1 / 2)
 end
 
 function love.draw()
-    love.graphics.setScreen("top")
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.draw(yh, 0, 0)
-    love.graphics.setScreen("bottom")
-    for i = 1,18 do
-        inventory_buttons[i].draw()
-    end
+    draw_intro()
+    -- for i = 1, 12 do inventory_buttons[i]:draw() end
 end
 
-
-
-function love.update(dt) 
-    y = 10 
-end
+function love.update(dt) y = 10 end
 
 function love.gamepadpressed(joystick, button)
     if button == 'start' then quit_game() end
 end
 
-function love.touchpressed(id, x, y, dx, dy, pressure) 
+function check_presses(x, y)
+    start_button:pressed(x, y)
+    quit_button:pressed(x, y)
 end
 
-function quit_game() 
-    love.event.quit() 
+function love.mousepressed(x, y, button, istouch, presses)
+    if button == 1 then check_presses(x, y) end
 end
+function love.touchpressed(id, x, y, dx, dy, pressure) check_presses(x, y) end
+
+function quit_game() love.event.quit() end
